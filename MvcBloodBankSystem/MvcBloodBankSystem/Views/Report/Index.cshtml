@@ -1,0 +1,70 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BloodBankModels.ReportSearch>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+   @using (Html.BeginForm("SearchReport", "Report",FormMethod.Get))
+   {
+      <text>Start Date:</text><input name = "start_date" type = "date" />
+      <text>End Date:</text><input name = "end_date" type = "date" /><br /><br />
+      <input type = "submit" value = "Search" />
+   }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Blood Group")
+        </th>
+        <th>
+            @Html.DisplayName("City")
+        </th>
+        <th>
+            @Html.DisplayName("Area")
+        </th>
+        <th>
+            @Html.DisplayName("Date")
+        </th>
+        
+    </tr>
+
+@if (Model.Count() == 0)
+{
+    <tr>
+        <td colspan="4">
+            <h3><span class="label label-danger">No Data Found</span></h3>
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.blood)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.city)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.area)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_now)
+            </td>
+
+        </tr>
+    }
+}
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page,start_date = Request.QueryString["start_date"], end_date = Request.QueryString["end_date"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+<h3><span class="label label-danger">@TempData["mg"]</span></h3>
+@Html.ActionLink("Back Home", "Index", "WelcomeAdmin")

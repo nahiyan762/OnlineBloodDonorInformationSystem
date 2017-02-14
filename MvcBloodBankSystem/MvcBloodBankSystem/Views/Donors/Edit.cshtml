@@ -1,0 +1,114 @@
+﻿@model BloodBankModels.Donor
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+<h2>Edit</h2>
+
+@if (Model == null)
+{
+    <h3><span class="label label-danger">You Have No Account</span></h3>
+}
+else
+{
+    using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Donor</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.donor_id)
+
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.donor_name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.donor_name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.donor_number, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.donor_number, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.donor_number, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.donor_image, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.donor_image, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <img src="@Url.Content("~/"+Model.donor_image)" height="120" width="120" /><br />
+                    @Html.TextBoxFor(model => model.donor_image, new { type = "file", htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.donor_image, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.donor_gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(model => model.donor_gender, "Male", new { htmlAttributes = new { @class = "form-control" } })
+                    Male
+                    @Html.RadioButtonFor(model => model.donor_gender, "Female", new { htmlAttributes = new { @class = "form-control" } })
+                    Female
+                    @Html.ValidationMessageFor(model => model.donor_gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.donor_age, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.donor_age, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.donor_age, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Blood Group", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.blood_id, null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.blood_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.city_id, null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.city_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.area_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("area_id", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessage("area_id", "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.start_date)
+            @Html.HiddenFor(model => model.end_date)
+            @Html.HiddenFor(model => model.comments)
+            @Html.HiddenFor(model => model.status)            
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    @Html.ActionLink("Delete Account","Delete")
+                </div>
+            </div><br /><br />
+            <h3><span class="label label-success">@ViewBag.msg</span></h3><br />
+            
+        </div>
+    }
+}
+<div>
+    @Html.ActionLink("Back", "Index", "WelcomeUser")
+</div>

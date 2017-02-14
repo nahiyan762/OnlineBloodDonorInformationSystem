@@ -1,0 +1,148 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BloodBankModels.Donor>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#city_id").change(function () {
+            $("#city").val($('option:selected', $(this)).text());
+            var Id = $(this).val();
+            $.getJSON("/Donors/GetCity", { city_id: Id },
+                   function (classesData) {
+                       var select = $("#area_id");
+                       select.empty();
+                       select.append($('<option/>', {
+                           value: "",
+                           text: "Please Select Your Area"
+
+                       }));
+                       $.each(classesData, function (index, itemData) {
+                           select.append($('<option/>', {
+                               value: itemData.Value,
+                               text: itemData.Text
+
+                           }));
+                     });
+              });
+        });
+    });
+
+  
+    $(document).ready(function () {
+        $("#blood_id").change(function () {
+            $("#blood").val($('option:selected', $(this)).text());
+        });
+    });
+
+    /*$(document).ready(function () {
+        $("#city_id").change(function () {
+            $("#city").val($('option:selected', $(this)).text());
+        });
+    });*/
+
+    $(document).ready(function () {
+        $("#area_id").change(function () {
+            $("#area").val($('option:selected', $(this)).text());
+        });
+    });
+
+
+</script>
+
+<h2>Index</h2>
+<p>
+ <b>Search By:</b>
+    @using (Html.BeginForm("Search","Search",FormMethod.Get))
+    {
+        @Html.DropDownList("blood_id", null, "Please Select Your Blood Group", htmlAttributes: new { @class = "form-control" })@Html.DropDownList("city_id", null, "Please Select Your City", htmlAttributes: new { @class = "form-control" })
+        @Html.DropDownList("area_id", new SelectList(string.Empty), "Please Select Your City First", htmlAttributes: new { @class = "form-control" })
+        <input type="submit" value="Search" />
+        <input type="hidden" id="blood" name="blood"/>
+        <input type="hidden" id="city" name="city" />
+        <input type="hidden" id="area" name="area" />
+    }
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Number")
+        </th>
+        <th>
+            @Html.DisplayName("Image")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("Gender")
+        </th>
+        <th>
+            @Html.DisplayName("Blood Group")
+        </th>
+        <th>
+            @Html.DisplayName("City")
+        </th>
+        <th>
+            @Html.DisplayName("Area")
+        </th>
+        
+    </tr>
+
+@if (Model.Count() == 0)
+{
+    <tr>
+        <td colspan="8">
+            <h3><span class="label label-danger">No Data Found</span></h3>
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_number)
+            </td>
+            <td>
+                <img src="@Url.Content("~/"+item.donor_image)" height="120" width="120" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BloodId.blood_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CityId.city_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreaId.area_name)
+            </td>
+        </tr>
+    }
+}
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, blood_id=Request.QueryString["blood_id"], city_id = Request.QueryString["city_id"], area_id = Request.QueryString["area_id"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+<h3><span class="label label-danger">@TempData["war"]</span></h3>
+@Html.ActionLink("Back Home","Index","WelcomeUser")

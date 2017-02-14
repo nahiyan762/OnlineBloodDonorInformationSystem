@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BloodBankModels.Area>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Area")
+           
+        </th>
+        <th>
+            @Html.DisplayName("City")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.area_name)
+           
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CityId.city_name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.area_id }, htmlAttributes: new { @class = "btn btn-success" }) |
+            @Html.ActionLink("Details", "Details", new { id=item.area_id }, htmlAttributes: new { @class = "btn btn-info" }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.area_id }, htmlAttributes: new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+    @Html.ActionLink("Back","Index", "WelcomeAdmin")
+</p>

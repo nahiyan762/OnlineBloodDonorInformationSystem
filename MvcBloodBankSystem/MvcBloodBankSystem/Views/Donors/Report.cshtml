@@ -1,0 +1,86 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BloodBankModels.Donor>
+
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Report</h2>
+
+<p>
+    @using (Html.BeginForm("Search", "Donors", FormMethod.Get))
+    {
+        <text>Start Date:</text><input name="start_date" type="date" />
+        <text>End Date:</text><input name="end_date" type="date" /><br /><br />
+        <input type="submit" value="Search" />
+    } 
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Contact Number")
+        </th>
+        <th>
+            @Html.DisplayName("Image")
+        </th>
+        <th>
+            @Html.DisplayName("Age")
+        </th>
+        <th>
+            @Html.DisplayName("Gender")
+        </th>
+        <th>
+            @Html.DisplayName("Blood Group")
+        </th>
+        <th>
+            @Html.DisplayName("Donation Date")
+        </th>
+    </tr>
+
+@if (Model.Count()==0)
+{
+    <tr>
+        <td colspan="7">
+            <h3><span class="label label-danger">Data Not Found</span></h3>
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_number)
+            </td>
+            <td>
+                <img src="@Url.Content("~/"+item.donor_image)" height="120" width="120" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BloodId.blood_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.start_date)
+            </td>
+        </tr>
+    }
+}
+</table>
+<h3><span class="label label-danger">@TempData["mg"]</span></h3>
+@Html.PagedListPager(Model, page => Url.Action("Report", new { page, start_date = Request.QueryString["start_date"], end_date = Request.QueryString["end_date"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+@Html.ActionLink("Back Home","Index","WelcomeAdmin")

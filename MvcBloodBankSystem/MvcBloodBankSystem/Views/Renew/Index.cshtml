@@ -1,0 +1,75 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BloodBankModels.Donor>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+       
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+       
+        <th>
+            @Html.DisplayName("Image")
+        </th>
+        
+        <th>
+            @Html.DisplayName("Date Of Blood Donation")
+        </th>
+        <th>
+            @Html.DisplayName("Capable Date Of Blood Donation")
+        </th>
+       
+        <th>
+            Confirmation
+        </th>
+    </tr>
+
+@if (Model.Count() == 0)
+{
+    <tr>
+        <td colspan="5">
+            <h3><span class="label label-info">No One Donated Blood Now</span></h3>
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.donor_name)
+            </td>
+
+            <td>
+                <img src="@Url.Content("~/"+item.donor_image)" height="120" width="120" />
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.start_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.end_date)
+            </td>
+
+            <td>
+                @Html.ActionLink("Confirm", "Confirm", new { id = item.donor_id }, htmlAttributes: new { @class = "btn btn-success" })
+            </td>
+        </tr>
+    }
+}
+
+</table>
+@Html.PagedListPager(Model, page=>Url.Action("Index",new { page }), new PagedListRenderOptions() { Display=PagedListDisplayMode.IfNeeded,DisplayPageCountAndCurrentLocation=true})
+<h3><span class="label label-success">@TempData["mg"]</span></h3>
+@Html.ActionLink("Back Home","Index","WelcomeAdmin")

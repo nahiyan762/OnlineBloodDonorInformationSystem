@@ -1,0 +1,57 @@
+﻿@model BloodBankModels.Donor
+
+@{
+    ViewBag.Title = "Comment";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Comment</h2>
+
+@if (Model == null)
+{
+    <h3><span class="label label-danger">You Have No Account</span></h3>
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Donor</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.donor_id)
+
+
+            <div class="form-group">
+                @Html.Label("Date Of Blood Donate", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.start_date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.start_date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("FeedBack", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.comments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.Hidden("status", "not available")
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Post" class="btn btn-primary" />
+                </div>
+            </div><br /><br />
+            <h3><span class="label label-success">@ViewBag.msg</span></h3>
+        </div>
+    }
+}
+
+<div>
+    @Html.ActionLink("Back", "Index", "WelcomeUser")
+</div>
